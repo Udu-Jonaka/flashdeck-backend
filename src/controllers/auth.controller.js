@@ -210,5 +210,32 @@ const getProfile = async (req, res) => {
   }
 };
 
+// UPDATE USER PROFILE (Protected)
+const updateProfile = async (req, res) => {
+  try {
+    const { username } = req.body;
+
+    if (!username || !username.trim()) {
+      return res.status(400).json({ message: "Username cannot be empty" });
+    }
+
+    const user = await User.findById(req.user._id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    user.profile.username = username.trim();
+    await user.save();
+
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user,
+    });
+  } catch (error) {
+    console.error("Update Profile Error:", error);
+    res.status(500).json({ message: "Server error while updating profile" });
+  }
+};
+
 // Don't forget to export it!
-module.exports = { registerUser, verifyPin, resendPin, loginUser, getProfile };
+module.exports = { registerUser, verifyPin, resendPin, loginUser, getProfile, updateProfile };

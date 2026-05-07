@@ -7,6 +7,7 @@ const {
   resendPin,
   loginUser,
   getProfile,
+  updateProfile,
 } = require("../controllers/auth.controller");
 // 2. Import the middleware
 const { protect } = require("../middlewares/auth.middleware");
@@ -16,7 +17,8 @@ router.post("/verify-email", verifyPin);
 router.post("/resend-pin", resendPin);
 router.post("/login", loginUser);
 
-// 3. Add the protected route
+// 3. Protected routes
 router.get("/profile", protect, getProfile);
+router.patch("/profile", protect, updateProfile);
 
 module.exports = router;
