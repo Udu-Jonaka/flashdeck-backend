@@ -7,6 +7,10 @@ const groq = new Groq({
 
 const generateFlashcards = async (text, difficulty, amount) => {
   try {
+    // 0. Safety Check: Truncate text if it's massive to avoid API limits (approx 300k chars)
+    const safeText =
+      text.length > 300000 ? text.substring(0, 300000) + "..." : text;
+
     // 1. The System Prompt (This forces the AI to behave perfectly)
     const systemPrompt = `
       You are an expert educational AI designed to create high-quality flashcards.
@@ -31,7 +35,10 @@ const generateFlashcards = async (text, difficulty, amount) => {
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: "system", content: systemPrompt },
-        { role: "user", content: `Here is the text to process:\n\n${text}` },
+        {
+          role: "user",
+          content: `Here is the text to process:\n\n${safeText}`,
+        },
       ],
       model: "llama-3.1-8b-instant",
       temperature: 0.3, // Lower temperature means more predictable, structured JSON
