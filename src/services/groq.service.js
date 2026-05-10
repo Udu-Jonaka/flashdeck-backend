@@ -58,7 +58,10 @@ const generateFlashcards = async (text, difficulty, amount) => {
       ? parsedData
       : Object.values(parsedData).find((val) => Array.isArray(val)) || [];
 
-    return finalArray;
+    // Filter the array to ensure every card is valid (has 'q' and 'a')
+    const validCards = finalArray.filter((card) => card && card.q && card.a);
+
+    return validCards;
   } catch (error) {
     console.error("Groq Service Error:", error);
     throw new Error("Failed to generate flashcards from AI");
