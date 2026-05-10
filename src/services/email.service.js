@@ -1,4 +1,8 @@
 const nodemailer = require("nodemailer");
+const dns = require("dns"); // <-- Import the built-in DNS module
+
+// Force Node.js to prefer IPv4 over IPv6 for DNS lookups
+dns.setDefaultResultOrder("ipv4first");
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
@@ -6,9 +10,8 @@ const transporter = nodemailer.createTransport({
   secure: true, // Use SSL
   auth: {
     user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS,
+    pass: process.env.EMAIL_PASS, // Reminder: This MUST be an App Password!
   },
-  // Adding a timeout helps if Render's network is briefly sluggish
   connectionTimeout: 10000,
 });
 
