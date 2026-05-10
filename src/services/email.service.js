@@ -13,7 +13,7 @@ const transporter = nodemailer.createTransport({
 const sendVerificationEmail = async (userEmail, pin) => {
   try {
     const mailOptions = {
-      from: `"Flashdeck App" <${process.env.EMAIL_USER}>`,
+      from: `"Flashdeck App" <${process.env.BREVO_USER}>`,
       to: userEmail,
       subject: "Verify your Flashdeck Account",
       html: `
