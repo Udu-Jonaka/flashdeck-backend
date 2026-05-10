@@ -27,13 +27,13 @@ const generateFlashcards = async (text, difficulty, amount) => {
     `;
 
     // 2. The API Call
-    // We use llama-3.3-70b-versatile because it is incredibly smart and fast at formatting JSON
+    // We use llama-3.1-8b-instant for fast, lightweight generation
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: "system", content: systemPrompt },
         { role: "user", content: `Here is the text to process:\n\n${text}` },
       ],
-      model: "llama-3.3-70b-versatile",
+      model: "llama-3.1-8b-instant",
       temperature: 0.3, // Lower temperature means more predictable, structured JSON
       response_format: { type: "json_object" }, // New Groq feature to enforce JSON!
     });
