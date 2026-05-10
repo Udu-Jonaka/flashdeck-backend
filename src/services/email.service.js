@@ -1,18 +1,13 @@
 const nodemailer = require("nodemailer");
-const dns = require("dns"); // <-- Import the built-in DNS module
-
-// Force Node.js to prefer IPv4 over IPv6 for DNS lookups
-dns.setDefaultResultOrder("ipv4first");
 
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 465,
-  secure: true, // Use SSL
+  host: "smtp-relay.brevo.com",
+  port: 587,
+  secure: false, // true for 465, false for other ports
   auth: {
-    user: process.env.EMAIL_USER,
-    pass: process.env.EMAIL_PASS, // Reminder: This MUST be an App Password!
+    user: process.env.BREVO_USER, // e.g., your email address
+    pass: process.env.BREVO_PASS, // The SMTP key Brevo generates for you
   },
-  connectionTimeout: 10000,
 });
 
 const sendVerificationEmail = async (userEmail, pin) => {
