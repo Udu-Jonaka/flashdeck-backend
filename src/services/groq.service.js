@@ -31,7 +31,7 @@ const generateFlashcards = async (text, difficulty, amount) => {
     `;
 
     // 2. The API Call
-    // We use llama-3.1-8b-instant for fast, lightweight generation
+    // We use meta-llama/llama-4-scout-17b-16e-instruct for advanced reasoning
     const chatCompletion = await groq.chat.completions.create({
       messages: [
         { role: "system", content: systemPrompt },
@@ -40,7 +40,7 @@ const generateFlashcards = async (text, difficulty, amount) => {
           content: `Here is the text to process:\n\n${safeText}`,
         },
       ],
-      model: "llama-3.1-8b-instant",
+      model: "meta-llama/llama-4-scout-17b-16e-instruct",
       temperature: 0.3, // Lower temperature means more predictable, structured JSON
       response_format: { type: "json_object" }, // New Groq feature to enforce JSON!
     });
