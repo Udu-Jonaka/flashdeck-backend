@@ -9,7 +9,7 @@ const generateFlashcards = async (text, difficulty, amount) => {
   try {
     // 0. Safety Check: Truncate text if it's massive to avoid API limits (approx 300k chars)
     const safeText =
-      text.length > 90000 ? text.substring(0, 90000) + "..." : text;
+      text.length > 60000 ? text.substring(0, 60000) + "..." : text;
 
     // 1. The System Prompt (This forces the AI to behave perfectly)
     const systemPrompt = `
