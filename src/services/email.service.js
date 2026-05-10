@@ -1,8 +1,13 @@
 const nodemailer = require("nodemailer");
 
-// Create the transporter using your SMTP connection string from .env
-// e.g. SMTP_URL=smtps://user:password@smtp.gmail.com
-const transporter = nodemailer.createTransport(process.env.SMTP_URL);
+// Create the transporter using the official Gmail service config
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
 
 const sendVerificationEmail = async (userEmail, pin) => {
   try {
