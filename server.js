@@ -20,6 +20,9 @@ connectDB(); // Connect to MongoDB
 // 4. Initialize Express
 const app = express();
 
+// Trust the reverse proxy (e.g., Render) so rate limiting uses the correct IP
+app.set("trust proxy", 1);
+
 // 5. Apply Global Middleware
 app.use(helmet()); // Security headers
 app.use(cors()); // Enable CORS
