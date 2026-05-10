@@ -1,22 +1,18 @@
-const nodemailer = require("nodemailer");
+// Using Brevo's HTTP API instead of SMTP to bypass Render's port blocking
+const axios = require("axios");
 
-const transporter = nodemailer.createTransport({
-  host: "smtp-relay.brevo.com",
-  port: 587,
-  secure: false, // true for 465, false for other ports
-  auth: {
-    user: process.env.BREVO_USER, // e.g., your email address
-    pass: process.env.BREVO_PASS, // The SMTP key Brevo generates for you
-  },
-});
+const BREVO_API_URL = "https://api.brevo.com/v3/smtp/email";
 
 const sendVerificationEmail = async (userEmail, pin) => {
   try {
-    const mailOptions = {
-      from: `"Flashdeck App" <${process.env.BREVO_USER}>`,
-      to: userEmail,
+    const emailData = {
+      sender: {
+        name: "Flashdeck App",
+        email: process.env.BREVO_USER,
+      },
+      to: [{ email: userEmail }],
       subject: "Verify your Flashdeck Account",
-      html: `
+      htmlContent: `
         <div style="font-family: Arial, sans-serif; text-align: center; padding: 20px;">
           <h2>Welcome to Flashdeck!</h2>
           <p>We are excited to have you. Please use the PIN below to verify your account:</p>
@@ -26,10 +22,16 @@ const sendVerificationEmail = async (userEmail, pin) => {
       `,
     };
 
-    await transporter.sendMail(mailOptions);
+    await axios.post(BREVO_API_URL, emailData, {
+      headers: {
+        "api-key": process.env.BREVO_API_KEY,
+        "Content-Type": "application/json",
+      },
+    });
+
     console.log(`Verification email sent to ${userEmail}`);
   } catch (error) {
-    console.error("Error sending email:", error);
+    console.error("Error sending email:", error.response?.data || error.message);
     throw new Error("Could not send verification email");
   }
 };
